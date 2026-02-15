@@ -5,6 +5,8 @@ import { collection, query, where, getDocs, updateDoc, doc, writeBatch } from 'f
 import { useAuth } from '../../context/AuthContext';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { motion } from 'framer-motion';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+
 
 export default function ProblemQuotes() {
   const { problemId } = useParams();
@@ -70,6 +72,20 @@ export default function ProblemQuotes() {
       });
 
       await batch.commit();
+
+      const acceptedQuote = quotes.find(q => q.id === quoteId);
+
+await addDoc(collection(db, 'notifications'), {
+  userId: acceptedQuote.expertId,        // expert ki user ID
+  type: 'quote_accepted',
+  problemId: problemId,
+  problemTitle: `${problemData?.deviceType} in ${problemData?.city}`, // agar problemData available ho to
+  expertId: acceptedQuote.expertId,
+  quoteId: quoteId,
+  read: false,
+  createdAt: serverTimestamp()
+});
+
       alert('Quote accepted! Expert has been notified.');
       navigate('/my-submissions');
     } catch (error) {

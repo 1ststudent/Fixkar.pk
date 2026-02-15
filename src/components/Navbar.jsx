@@ -4,12 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import { useExpert } from '../hooks/useExpert';
 import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useNotifications } from '../hooks/useNotifications';
 
 export default function Navbar() {
   const { isDark, toggleTheme } = useTheme();
   const { currentUser, logout } = useAuth();
   const { isExpert } = useExpert();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { unreadCount } = useNotifications();
 
   async function handleLogout() {
     try {
@@ -20,7 +22,7 @@ export default function Navbar() {
   }
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100 }}
@@ -28,7 +30,8 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <motion.div 
+          {/* Logo */}
+          <motion.div
             className="flex items-center"
             whileHover={{ scale: 1.05 }}
           >
@@ -37,28 +40,51 @@ export default function Navbar() {
             </Link>
           </motion.div>
 
+          {/* Navigation Links */}
           <div className="flex items-center space-x-4">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 transition">Home</Link>
-            <Link to="/submit" className="text-gray-700 hover:text-blue-600 transition">Submit Problem</Link>
-            <Link to="/experts" className="text-gray-700 hover:text-blue-600 transition">Experts</Link>
+            <Link to="/" className="text-gray-700 hover:text-blue-600 transition">
+              Home
+            </Link>
+            <Link to="/submit" className="text-gray-700 hover:text-blue-600 transition">
+              Submit Problem
+            </Link>
+            <Link to="/experts" className="text-gray-700 hover:text-blue-600 transition">
+              Experts
+            </Link>
 
             {currentUser ? (
               <div className="relative">
+                {/* User Icon with Notification Badge */}
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center space-x-2 bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-300 focus:outline-none"
+                  className="flex items-center space-x-2 bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-300 focus:outline-none relative"
                 >
                   <span className="text-sm font-medium">
                     {currentUser.email?.charAt(0).toUpperCase()}
                   </span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadCount}
+                    </span>
+                  )}
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
+                {/* Dropdown Menu */}
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 border">
-                    {/* Profile Link */}
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
@@ -66,8 +92,6 @@ export default function Navbar() {
                     >
                       👤 My Profile
                     </Link>
-
-                    {/* Settings Link */}
                     <Link
                       to="/settings"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
@@ -75,8 +99,6 @@ export default function Navbar() {
                     >
                       ⚙️ Settings
                     </Link>
-
-                    {/* My Submissions */}
                     <Link
                       to="/my-submissions"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
@@ -84,8 +106,18 @@ export default function Navbar() {
                     >
                       📋 My Submissions
                     </Link>
-
-                    {/* Expert link (if expert) */}
+                    <Link
+                      to="/notifications"
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center justify-between"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <span>🔔 Notifications</span>
+                      {unreadCount > 0 && (
+                        <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </Link>
                     {isExpert && (
                       <Link
                         to="/expert/problems"
@@ -95,10 +127,7 @@ export default function Navbar() {
                         🔧 Available Problems
                       </Link>
                     )}
-
                     <hr className="my-1" />
-
-                    {/* Dark Theme Toggle (inside dropdown) */}
                     <button
                       onClick={toggleTheme}
                       className="w-full px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center justify-between"
@@ -108,10 +137,7 @@ export default function Navbar() {
                         {isDark ? 'ON' : 'OFF'}
                       </span>
                     </button>
-
                     <hr className="my-1" />
-
-                    {/* Logout */}
                     <button
                       onClick={() => {
                         setDropdownOpen(false);
@@ -126,10 +152,16 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center space-x-2">
-                <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm">
+                <Link
+                  to="/login"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
+                >
                   Login
                 </Link>
-                <Link to="/signup" className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition text-sm">
+                <Link
+                  to="/signup"
+                  className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition text-sm"
+                >
                   Sign Up
                 </Link>
               </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
-import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore'; // 👈 Single import line
 import { useExpert } from '../../hooks/useExpert';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { motion } from 'framer-motion';
@@ -50,9 +50,10 @@ export default function SubmitQuote() {
 
     setSubmitting(true);
     try {
-      await addDoc(collection(db, 'quotes'), {
+      // 1. Save quote
+      const quoteRef = await addDoc(collection(db, 'quotes'), {
         problemId,
-        expertId: expertData.id,      // using expert document ID as expertId
+        expertId: expertData.id,
         expertEmail: expertData.email,
         expertName: expertData.name,
         price: Number(formData.price),
@@ -61,6 +62,21 @@ export default function SubmitQuote() {
         status: 'pending',
         createdAt: serverTimestamp()
       });
+
+      // 2. Create notification for problem owner
+      if (problem && problem.userId) {
+        await addDoc(collection(db, 'notifications'), {
+          userId: problem.userId,
+          type: 'new_quote',
+          problemId: problemId,
+          problemTitle: `${problem.deviceType} in ${problem.city}`,
+          expertId: expertData.id,
+          expertName: expertData.name,
+          quoteId: quoteRef.id,
+          read: false,
+          createdAt: serverTimestamp()
+        });
+      }
 
       alert('Quote submitted successfully!');
       navigate('/expert/problems');
