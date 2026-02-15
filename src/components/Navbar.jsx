@@ -55,27 +55,64 @@ export default function Navbar() {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border">
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 border">
+                    {/* Profile Link */}
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      👤 My Profile
+                    </Link>
+
+                    {/* Settings Link */}
+                    <Link
+                      to="/settings"
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      ⚙️ Settings
+                    </Link>
+
+                    {/* My Submissions */}
                     <Link
                       to="/my-submissions"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                       onClick={() => setDropdownOpen(false)}
                     >
-                      My Submissions
+                      📋 My Submissions
                     </Link>
 
+                    {/* Expert link (if expert) */}
                     {isExpert && (
                       <Link
                         to="/expert/problems"
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                         onClick={() => setDropdownOpen(false)}
                       >
-                        Available Problems
+                        🔧 Available Problems
                       </Link>
                     )}
 
                     <hr className="my-1" />
 
+                    {/* Dark Theme Toggle (inside dropdown) */}
+                    <div className="px-4 py-2 flex items-center justify-between">
+                      <span className="text-gray-800">🌙 Dark Theme</span>
+                      <button
+                        onClick={() => {
+                          // Toggle theme logic - you can implement later
+                          alert('Dark theme toggle - will be implemented soon');
+                        }}
+                        className="text-sm bg-gray-200 px-2 py-1 rounded"
+                      >
+                        Toggle
+                      </button>
+                    </div>
+
+                    <hr className="my-1" />
+
+                    {/* Logout */}
                     <button
                       onClick={() => {
                         setDropdownOpen(false);
@@ -83,7 +120,7 @@ export default function Navbar() {
                       }}
                       className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
                     >
-                      Logout
+                      🚪 Logout
                     </button>
                   </div>
                 )}

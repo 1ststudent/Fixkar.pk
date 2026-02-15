@@ -19,7 +19,8 @@ import ExpertRoute from './components/ExpertRoute';
 import AvailableProblems from './pages/expert/AvailableProblems';
 import SubmitQuote from './pages/expert/SubmitQuote';
 import ProblemQuotes from './pages/user/ProblemQuotes';
-
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -39,7 +40,8 @@ function App() {
   </ExpertRoute>
 } />
 <Route path="/my-submissions/:problemId/quotes" element={<ProblemQuotes />} />
-
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/" element={<Home />} />
           <Route path="/submit" element={<SubmitProblem />} />
           <Route path="/experts" element={<Experts />} />
