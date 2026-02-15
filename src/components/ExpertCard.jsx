@@ -87,9 +87,12 @@ export default function ExpertCard({ expert, index }) {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <button className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+        <a
+          href={`mailto:${expert.email}`}
+          className="mt-4 w-full block text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+        >
           Contact
-        </button>
+        </a>
       </motion.div>
     </motion.div>
   );
