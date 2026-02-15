@@ -25,6 +25,8 @@ export default function MySubmissions() {
     const fetchSubmissions = async () => {
       if (!currentUser) return;
 
+       console.log('🔍 Fetching submissions for user:', currentUser.uid);
+
       try {
         // Query problems where userId = currentUser.uid
         const q = query(
@@ -34,22 +36,28 @@ export default function MySubmissions() {
         );
 
         const querySnapshot = await getDocs(q);
-        const submissionsList = querySnapshot.docs.map(doc => ({
+        console.log('📦 Query snapshot empty?', querySnapshot.empty);
+        console.log('📦 Number of documents:', querySnapshot.size);
+
+         const submissionsList = querySnapshot.docs.map(doc => {
+        console.log('📄 Document:', doc.id, doc.data());
+        return {
           id: doc.id,
           ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate() // Convert Firebase timestamp to Date
-        }));
+          createdAt: doc.data().createdAt?.toDate()
+        };
+      });
 
-        setSubmissions(submissionsList);
-      } catch (error) {
-        console.error('Error fetching submissions:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setSubmissions(submissionsList);
+    } catch (error) {
+      console.error('❌ Error fetching submissions:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchSubmissions();
-  }, [currentUser]);
+  fetchSubmissions();
+}, [currentUser]);
 
   // Helper function to get status badge color
   const getStatusBadge = (status) => {
