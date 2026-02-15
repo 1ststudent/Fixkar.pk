@@ -2,16 +2,12 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useExpert } from '../hooks/useExpert';
-
+import { useState } from 'react';
 
 export default function Navbar() {
   const { currentUser, logout } = useAuth();
   const { isExpert } = useExpert();
-  {isExpert && (
-  <Link to="/expert/problems" className="text-gray-700 hover:text-blue-600 transition">
-    Available Problems
-  </Link>
-)}
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   async function handleLogout() {
     try {
@@ -44,40 +40,60 @@ export default function Navbar() {
             <Link to="/submit" className="text-gray-700 hover:text-blue-600 transition">Submit Problem</Link>
             <Link to="/experts" className="text-gray-700 hover:text-blue-600 transition">Experts</Link>
 
-
-          {currentUser && (
-            <Link 
-              to="/my-submissions" 
-              className="text-gray-700 hover:text-blue-600 transition"
-            >
-               My Submissions
-            </Link>
-            )}
-
             {currentUser ? (
-              // Agar user logged in hai to email aur logout dikhao
-              <div className="flex items-center space-x-3">
-                <span className="text-sm text-gray-600">{currentUser.email}</span>
+              <div className="relative">
                 <button
-                  onClick={handleLogout}
-                  className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition text-sm"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center space-x-2 bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-300 focus:outline-none"
                 >
-                  Logout
+                  <span className="text-sm font-medium">
+                    {currentUser.email?.charAt(0).toUpperCase()}
+                  </span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
+
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border">
+                    <Link
+                      to="/my-submissions"
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      My Submissions
+                    </Link>
+
+                    {isExpert && (
+                      <Link
+                        to="/expert/problems"
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        Available Problems
+                      </Link>
+                    )}
+
+                    <hr className="my-1" />
+
+                    <button
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        logout();
+                      }}
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
-              // Agar logged out hai to Login/Signup links
               <div className="flex items-center space-x-2">
-                <Link
-                  to="/login"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
-                >
+                <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm">
                   Login
                 </Link>
-                <Link
-                  to="/signup"
-                  className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition text-sm"
-                >
+                <Link to="/signup" className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition text-sm">
                   Sign Up
                 </Link>
               </div>
