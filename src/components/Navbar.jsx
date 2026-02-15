@@ -1,10 +1,11 @@
+import { useNotifications } from '../hooks/useNotifications';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useExpert } from '../hooks/useExpert';
 import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { useNotifications } from '../hooks/useNotifications';
+
 
 export default function Navbar() {
   const { isDark, toggleTheme } = useTheme();
