@@ -31,7 +31,7 @@ function App() {
       <AuthProvider>    {/* 👈 Wrap kiya */}
         <Navbar />
         <Routes>
-        <Route path="/notifications" element={<Notifications />} />
+       
         <Route path="/expert/problems" element={
         <ExpertRoute>
         <AvailableProblems />
@@ -53,6 +53,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/my-submissions" element={<MySubmissions />} />
           <Route path="/my-submissions/:problemId/quotes" element={<ProblemQuotes />} />
+           <Route path="/notifications" element={<Notifications />} />
           <Route path="/admin" element={
   <AdminRoute>
     <AdminLayout />
