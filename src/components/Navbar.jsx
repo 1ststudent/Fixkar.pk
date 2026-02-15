@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useExpert } from '../hooks/useExpert';
 import { useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Navbar() {
+  const { isDark, toggleTheme } = useTheme();
   const { currentUser, logout } = useAuth();
   const { isExpert } = useExpert();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -100,13 +102,13 @@ export default function Navbar() {
                     <div className="px-4 py-2 flex items-center justify-between">
                       <span className="text-gray-800">🌙 Dark Theme</span>
                       <button
-                        onClick={() => {
-                          // Toggle theme logic - you can implement later
-                          alert('Dark theme toggle - will be implemented soon');
-                        }}
-                        className="text-sm bg-gray-200 px-2 py-1 rounded"
+                        onClick={toggleTheme}
+                        className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center justify-between"
                       >
-                        Toggle
+                        <span>{isDark ? '☀️ Light Mode' : '🌙 Dark Mode'}</span>
+                        <span className="text-xs bg-gray-200 px-2 py-1 rounded">
+                          {isDark ? 'ON' : 'OFF'}
+                        </span>
                       </button>
                     </div>
 

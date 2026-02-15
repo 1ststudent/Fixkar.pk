@@ -21,10 +21,12 @@ import SubmitQuote from './pages/expert/SubmitQuote';
 import ProblemQuotes from './pages/user/ProblemQuotes';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
     <Router>
+      <ThemeProvider> 
       <AuthProvider>    {/* 👈 Wrap kiya */}
         <Navbar />
         <Routes>
@@ -65,6 +67,7 @@ function App() {
 </Route>
         </Routes>
       </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }
