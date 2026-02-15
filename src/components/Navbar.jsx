@@ -99,18 +99,15 @@ export default function Navbar() {
                     <hr className="my-1" />
 
                     {/* Dark Theme Toggle (inside dropdown) */}
-                    <div className="px-4 py-2 flex items-center justify-between">
-                      <span className="text-gray-800">🌙 Dark Theme</span>
-                      <button
-                        onClick={toggleTheme}
-                        className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center justify-between"
-                      >
-                        <span>{isDark ? '☀️ Light Mode' : '🌙 Dark Mode'}</span>
-                        <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-                          {isDark ? 'ON' : 'OFF'}
-                        </span>
-                      </button>
-                    </div>
+                    <button
+                      onClick={toggleTheme}
+                      className="w-full px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center justify-between"
+                    >
+                      <span>{isDark ? '☀️ Light Mode' : '🌙 Dark Mode'}</span>
+                      <span className="text-xs bg-gray-200 px-2 py-1 rounded">
+                        {isDark ? 'ON' : 'OFF'}
+                      </span>
+                    </button>
 
                     <hr className="my-1" />
 
