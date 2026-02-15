@@ -22,6 +22,7 @@ import ProblemQuotes from './pages/user/ProblemQuotes';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import { ThemeProvider } from './context/ThemeContext';
+import Notifications from './pages/Notifications';
 
 function App() {
   return (
@@ -30,18 +31,18 @@ function App() {
       <AuthProvider>    {/* 👈 Wrap kiya */}
         <Navbar />
         <Routes>
-
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/expert/problems" element={
-  <ExpertRoute>
-    <AvailableProblems />
-  </ExpertRoute>
-} />
-<Route path="/expert/submit-quote/:problemId" element={
-  <ExpertRoute>
-    <SubmitQuote />
-  </ExpertRoute>
-} />
-<Route path="/my-submissions/:problemId/quotes" element={<ProblemQuotes />} />
+        <ExpertRoute>
+        <AvailableProblems />
+        </ExpertRoute>
+        } />
+        <Route path="/expert/submit-quote/:problemId" element={
+        <ExpertRoute>
+          <SubmitQuote />
+        </ExpertRoute>
+        } />
+        <Route path="/my-submissions/:problemId/quotes" element={<ProblemQuotes />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/" element={<Home />} />
